@@ -122,7 +122,7 @@ public abstract class BaseActivity extends Activity implements Callback,
     private void requirePermission(){
         // Here, thisActivity is the current activity
         if (ContextCompat.checkSelfPermission(this,
-                Manifest.permission.READ_CONTACTS)
+                Manifest.permission.READ_PHONE_STATE)
                 != PackageManager.PERMISSION_GRANTED) {
 
             // Should we show an explanation?
@@ -132,7 +132,9 @@ public abstract class BaseActivity extends Activity implements Callback,
                 // Show an expanation to the user *asynchronously* -- don't block
                 // this thread waiting for the user's response! After the user
                 // sees the explanation, try again to request the permission.
-
+                ActivityCompat.requestPermissions(this,
+                        new String[]{Manifest.permission.READ_PHONE_STATE},
+                        MY_PERMISSIONS_READ_PHONE_STATE);
             } else {
 
                 // No explanation needed, we can request the permission.
