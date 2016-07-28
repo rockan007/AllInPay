@@ -6,16 +6,21 @@ import java.net.URL;
 import java.net.URLConnection;
 import org.json.JSONException;
 import org.json.JSONObject;
+
+import android.Manifest;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Handler.Callback;
 import android.os.Message;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.ContextCompat;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -34,6 +39,8 @@ public abstract class BaseActivity extends Activity implements Callback,
     public static final int PLUGIN_VALID = 0;
     public static final int PLUGIN_NOT_INSTALLED = -1;
     public static final int PLUGIN_NEED_UPGRADE = 2;
+    public static final int MY_PERMISSIONS_READ_PHONE_STATE = 0;
+
 
     /*****************************************************************
      * mMode参数解释： "00" - 启动银联正式环境 "01" - 连接银联测试环境
@@ -80,15 +87,15 @@ public abstract class BaseActivity extends Activity implements Callback,
     }
 
     public abstract void updateTextView(TextView tv);
-
+    String tn = "";
     @Override
     public boolean handleMessage(Message msg) {
+
         Log.e(LOG_TAG, " " + "" + msg.obj);
         if (mLoadingDialog.isShowing()) {
             mLoadingDialog.dismiss();
         }
 
-        String tn = "";
         if (msg.obj == null || ((String) msg.obj).length() == 0) {
             AlertDialog.Builder builder = new AlertDialog.Builder(this);
             builder.setTitle("错误提示");
@@ -106,10 +113,56 @@ public abstract class BaseActivity extends Activity implements Callback,
             /*************************************************
              * 步骤2：通过银联工具类启动支付插件
              ************************************************/
-            doStartUnionPayPlugin(this, tn, mMode);
+            requirePermission();
+
         }
 
         return false;
+    }
+    private void requirePermission(){
+        // Here, thisActivity is the current activity
+        if (ContextCompat.checkSelfPermission(this,
+                Manifest.permission.READ_CONTACTS)
+                != PackageManager.PERMISSION_GRANTED) {
+
+            // Should we show an explanation?
+            if (ActivityCompat.shouldShowRequestPermissionRationale(this,
+                    Manifest.permission.READ_PHONE_STATE)) {
+
+                // Show an expanation to the user *asynchronously* -- don't block
+                // this thread waiting for the user's response! After the user
+                // sees the explanation, try again to request the permission.
+
+            } else {
+
+                // No explanation needed, we can request the permission.
+
+                ActivityCompat.requestPermissions(this,
+                        new String[]{Manifest.permission.READ_PHONE_STATE},
+                        MY_PERMISSIONS_READ_PHONE_STATE);
+
+                // MY_PERMISSIONS_REQUEST_READ_CONTACTS is an
+                // app-defined int constant. The callback method gets the
+                // result of the request.
+            }
+        }else {
+            doStartUnionPayPlugin(this, tn, mMode);
+        }
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        switch (requestCode){
+            case MY_PERMISSIONS_READ_PHONE_STATE:
+                if (grantResults.length > 0
+                        && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    doStartUnionPayPlugin(this, tn, mMode);
+                }
+                break;
+            default:
+                break;
+        }
     }
 
     @Override
