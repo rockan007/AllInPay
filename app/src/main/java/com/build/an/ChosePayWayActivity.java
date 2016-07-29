@@ -7,8 +7,6 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 
 import com.build.an.allinpay.JARActivity;
-
-import com.build.an.weixin.PayActivity;
 import com.build.an.weixin.wxapi.WXEntryActivity;
 import com.build.an.zhifubao.PayDemoActivity;
 
@@ -29,7 +27,7 @@ public class ChosePayWayActivity extends AppCompatActivity {
      * 选择微信支付
      */
     public void wePay(View v){
-        mIntent.setClass(this, PayActivity.class);
+        mIntent.setClass(this, WXEntryActivity.class);
         startActivity(mIntent);
     }
     /**
@@ -38,7 +36,7 @@ public class ChosePayWayActivity extends AppCompatActivity {
    public void zhiFuPay(View view){
         mIntent.setClass(this, PayDemoActivity.class);
         startActivity(mIntent);
-    }
+   }
 
     /**
      * 选择银联支付

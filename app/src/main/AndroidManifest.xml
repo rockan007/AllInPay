@@ -55,6 +55,8 @@
         <!--微信-->
         <activity android:name=".weixin.PayActivity"
                   android:screenOrientation="portrait"/>
+        <activity android:name=".weixin.wxapi.WXEntryActivity"
+                  android:screenOrientation="portrait"/>
     </application>
 
 

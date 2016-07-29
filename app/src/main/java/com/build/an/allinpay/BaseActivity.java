@@ -111,7 +111,7 @@ public abstract class BaseActivity extends Activity implements Callback,
         } else {
             tn = (String) msg.obj;
             /*************************************************
-             * 步骤2：通过银联工具类启动支付插件
+             * 步骤2：请求权限后，通过银联工具类启动支付插件
              ************************************************/
             requirePermission();
 
@@ -265,7 +265,6 @@ public abstract class BaseActivity extends Activity implements Callback,
     private boolean verify(String msg, String sign64, String mode) {
         // 此处的verify，商户需送去商户后台做验签
         return true;
-
     }
 
 }

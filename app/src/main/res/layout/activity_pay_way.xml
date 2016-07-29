@@ -13,7 +13,7 @@
     <Button
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:drawableLeft="@drawable/msp_icon"
+        android:drawableLeft="@drawable/icon_alipay"
         android:text="@string/zhiFu_pay"
         android:onClick="zhiFuPay"/>
     <Button
